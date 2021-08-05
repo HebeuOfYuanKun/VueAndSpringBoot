@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 命名空间，xml文件和dao借口对接起来 -->
+<mapper namespace="com.yuankun.mapper.RoleMapper">
+    <select id="QueryMenuIdByRoleId" resultType="Integer" >
+        select distinct MenuId from sys_role_menu where RoleId in
+        <foreach item="id"  collection="list" open="(" separator="," close=")">#{id}</foreach>
+    </select>
+    <select id="QueryAllRole" parameterType="Map" resultType="Role">
+        select * from sys_role
+            <where>
+                <if test="Name!=null and Name!=''">name like concat ('%',#{Name},'%') </if>
+            </where>
+        limit #{start},#{end}
+    </select>
+    <select id="QueryAllRoleCount" parameterType="String" resultType="Integer">
+        select count(*) from sys_role
+        <where>
+            <if test="Name!=null and Name!=''">name like concat ('%',#{Name},'%') </if>
+        </where>
+    </select>
+    <delete id="DeleteRoles" >
+        delete from sys_role where id in
+        <foreach collection="array" item="estateId"
+                 open="(" close=")" separator=",">
+            #{estateId}
+        </foreach>
+    </delete>
+    <insert id="AddRoleAuth" parameterType="Map">
+        insert sys_role_menu(RoleId,MenuId) values
+            <foreach collection="ids" item="MenuId" separator=",">
+                (#{id},#{MenuId})
+            </foreach>
+    </insert>
+    <delete id="DesRoleAuth" parameterType="Map">
+        delete from sys_role_menu where RoleId=#{id} and MenuId in
+        <foreach collection="ids" item="MenuId" separator="," open="(" close=")">
+            #{MenuId}
+        </foreach>
+    </delete>
+    <select id="QueryRoleByRoleIds" resultType="Role" parameterType="Integer">
+        select * from sys_role
+            <where>
+                <if test="list.size>0">
+                    id in
+                    <foreach collection="list" item="RoleId" separator="," open="(" close=")">
+                        #{RoleId}
+                    </foreach>
+                </if>
+                <if test="list.size==0">
+                    1=2
+                </if>
+            </where>
+
+    </select>
+</mapper>

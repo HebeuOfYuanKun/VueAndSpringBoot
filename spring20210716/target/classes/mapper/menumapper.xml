@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 命名空间，xml文件和dao借口对接起来 -->
+<mapper namespace="com.yuankun.mapper.MenuMapper">
+    <select id="QueryAllMenu" resultMap="MenuBean">
+        select  * from sys_menu
+    </select>
+    <resultMap id="MenuBean" type="Menu">
+        <result column="id" property="id"/>
+        <result column="parent_id" property="ParentId"/>
+        <result column="name" property="Name"/>
+        <result column="path" property="Path"/>
+        <result column="perms" property="Perms"/>
+        <result column="component" property="Component"/>
+        <result column="type" property="Type"/>
+        <result column="icon" property="Icon"/>
+        <result column="orderNum" property="OrderNum"/>
+        <result column="created" property="Created"/>
+        <result column="updated" property="Updated"/>
+        <result column="statu" property="Statu"/>
+        <!--<collection property="Children" ofType="Menu">
+            <result column="cid" property="id"/>
+            <result column="cparent_id" property="ParentId"/>
+            <result column="cname" property="Name"/>
+            <result column="cpath" property="Path"/>
+            <result column="cperms" property="Perms"/>
+            <result column="ccomponent" property="Component"/>
+            <result column="ctype" property="Type"/>
+            <result column="cicon" property="Icon"/>
+            <result column="corderNum" property="OrderNum"/>
+            <result column="ccreated" property="Created"/>
+            <result column="cupdated" property="Updated"/>
+            <result column="cstatu" property="Statu"/>
+        </collection>-->
+    </resultMap>
+    <select id="QueryPermsByMenuId" resultType="String" >
+        SELECT perms from sys_menu WHERE id in
+        <foreach item="id"  collection="list" open="(" separator="," close=")">#{id}</foreach>
+    </select>
+    <select id="QueryMenusByMenuId" resultMap="MenuBean" >
+        SELECT * from sys_menu WHERE id in
+        <foreach item="id"  collection="list" open="(" separator="," close=")">#{id}</foreach>
+    </select>
+    <select id="QueryMenuByMenuId" resultMap="MenuBean" parameterType="Integer">
+        SELECT * from sys_menu WHERE id =#{id}
+    </select>
+    <insert id="AddMenu" parameterType="Menu" keyProperty="true" keyColumn="id">
+        insert sys_menu(id,parent_id,name,path,perms,component,type,icon,orderNum,created,updated,statu) values
+            (#{id},#{ParentId},#{Name},#{Path},#{Perms},#{Component},#{Type},#{Icon},#{OrderNum},#{Created},#{Updated},#{Statu})
+    </insert>
+    <update id="UpdateMenu" parameterType="Menu" >
+        update sys_menu set parent_id=#{ParentId},name=#{Name},path=#{Path},perms=#{Perms},component=#{Component},
+                            type=#{Type}, icon=#{Icon},orderNum=#{OrderNum},updated=#{Updated},statu=#{Statu} where id=#{id}
+    </update>
+</mapper>

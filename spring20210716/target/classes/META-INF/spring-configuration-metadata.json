@@ -1,0 +1,28 @@
+{
+  "groups": [
+    {
+      "name": "spring.datasource",
+      "type": "javax.sql.DataSource",
+      "sourceType": "com.yuankun.conf.DruidConf",
+      "sourceMethod": "druidDataSource()"
+    },
+    {
+      "name": "yuankun.jwt",
+      "type": "com.yuankun.util.JWTUtils",
+      "sourceType": "com.yuankun.util.JWTUtils"
+    }
+  ],
+  "properties": [
+    {
+      "name": "yuankun.jwt.expired",
+      "type": "java.lang.Integer",
+      "sourceType": "com.yuankun.util.JWTUtils"
+    },
+    {
+      "name": "yuankun.jwt.sign",
+      "type": "java.lang.String",
+      "sourceType": "com.yuankun.util.JWTUtils"
+    }
+  ],
+  "hints": []
+}
