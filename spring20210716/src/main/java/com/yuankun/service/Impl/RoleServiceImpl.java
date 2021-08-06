@@ -23,24 +23,28 @@ public class RoleServiceImpl implements RoleService {
         map.put("start",(currentPage-1)*size);
         map.put("end",currentPage*size);
         Result result=new Result();
+        Map<Object, Object> ResMap = MapUtil.builder()
+                .put("data",null)
+                .put("TotalCount", 0)
+                .build();
         Integer TotalCount=roleMapper.QueryAllRoleCount(name);
         if(TotalCount==0){
             result.setMsg("没有符合条件的记录");
-            result.setObject(null);
+            ResMap.replace("TotalCount",0);
+            result.setObject(ResMap);
             result.setStateCode(50);
             return result;
         }else{
             List<Role> roleList=roleMapper.QueryAllRole(map);
             if(roleList==null){
                 result.setMsg("没有符合条件的记录");
-                result.setObject(null);
+                result.setObject(ResMap);
                 result.setStateCode(50);
             }else{
                 result.setMsg("查询成功");
-                result.setObject(MapUtil.builder()
-                                    .put("data",roleList)
-                                    .put("TotalCount",TotalCount)
-                                .build());
+                ResMap.replace("data",roleList);
+                ResMap.replace("TotalCount",TotalCount);
+                result.setObject(ResMap);
                 result.setStateCode(200);
             }
             return result;

@@ -22,8 +22,8 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {//ç™»å
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
         httpServletResponse.setContentType("application/json;charset=UTF-8");
         ServletOutputStream servletOutputStream=httpServletResponse.getOutputStream();
-
-        Result result=new Result(401,e.getMessage(),null);
+        httpServletResponse.setStatus(402);
+        Result result=new Result(402,e.getMessage(),null);
 
 
         servletOutputStream.write(JSONUtil.toJsonStr(result).getBytes(StandardCharsets.UTF_8));

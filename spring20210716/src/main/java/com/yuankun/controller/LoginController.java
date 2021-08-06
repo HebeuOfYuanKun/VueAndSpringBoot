@@ -20,6 +20,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class LoginController {
@@ -31,9 +32,11 @@ public class LoginController {
     public Result ProduceCaptcha() throws IOException {
         String key= UUID.randomUUID().toString();
         String code= producer.createText();
-        key="12345";
-        code="12345";
-        redisTemplate.opsForValue().set(key,code);
+        /*key="12345";
+        code="12345";*/
+        //System.out.println("---------------"+code);
+        //redisTemplate.opsForValue().set(key,code,120L);
+        redisTemplate.opsForValue().set(key,code,120, TimeUnit.SECONDS);
         BufferedImage image=producer.createImage(code);
         ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
         ImageIO.write(image,"jpg",byteArrayOutputStream);
@@ -52,6 +55,4 @@ public class LoginController {
         return result;
 
     }
-    /*@PostMapping("/user")
-    public Result Login(@RequestBody User user)*/
 }

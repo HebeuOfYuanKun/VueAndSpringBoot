@@ -34,15 +34,17 @@ public class MenuController {
     public Result QueryNav(Principal principal){
         return menuService.QueryNav(principal.getName());
     }
-
+    @PreAuthorize("hasAuthority('sys:menu:list')")
     @PostMapping("/menu")
     public Result AddMenu(@RequestBody Menu menu){
         return menuService.AddMenu(menu);
     }
+    @PreAuthorize("hasAuthority('sys:menu:update')")
     @PutMapping("/menu")
     public Result UpdateMenu(@RequestBody Menu menu){
         return menuService.UpdateMenu(menu);
     }
+    @PreAuthorize("hasAuthority('sys:menu:delete')")
     @DeleteMapping("/menu/{id}")
     public Result DeleteMenu(@PathVariable Integer id){
         return menuService.DeleteMenu(id);
